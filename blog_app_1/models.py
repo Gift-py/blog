@@ -2,6 +2,7 @@ from django.urls import reverse
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from taggit.managers import TaggableManager
 
 #class for custom object manager
 class PublishedManager(models.Manager):
@@ -26,13 +27,13 @@ class Post(models.Model):
     objects = models.Manager() #default manager... does'nt need to be written just comes embedded in the model class
     published = PublishedManager() #custom manager
 
+    #tagging system
+    tags = TaggableManager()
+
     #this helps to link to specific spots in the website
     def get_absolute_url(self):
         return reverse('blog:post_detail', args=[self.publish.year, self.publish.month, self.publish.day, self.slug])
-
-
-
-
+        
     class Meta: 
         ordering = ('-publish',)
 
