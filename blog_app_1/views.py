@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
 from django.views.generic import ListView
+from django.db.models import Count
 from django.core.mail import send_mail
 from taggit.models import Tag
 
@@ -53,8 +54,11 @@ def post_detail(request, year, month, day, post):
             new_comment.save()
     else:
         comment_form = CommentForm()
-    return render(request, 'blog/post/detail.html', {'post':post, 'comments':comments, 'new_comment':new_comment, 'comment_form':comment_form})
-
+    
+    #list of similar posts
+    similar_posts = post.tags.similar_objects()
+    
+    return render(request, 'blog/post/detail.html', {'post':post, 'comments':comments, 'new_comment':new_comment, 'comment_form':comment_form, 'similar_posts':similar_posts})
 
 def post_share(request, post_id):
     #retrieve post by id
