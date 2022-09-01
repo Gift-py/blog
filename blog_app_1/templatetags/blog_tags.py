@@ -1,0 +1,27 @@
+from django.db.models import Count
+from django import template
+from ..models import Post
+
+from django.utils.safestring import mark_safe
+import markdown
+
+register = template.Library()
+
+@register.simple_tag
+def total_posts():
+    return Post.published.count()
+
+@register.inclusion_tag('blog/post/latest_post.html')
+def show_latest_posts(count=5):
+    latest_posts = Post.published.order_by('-publish')[:count]
+    return {'latest_posts':latest_posts}
+
+@register.inclusion_tag('blog/post/most_comments.html')
+def most_commented_posts(count=5):
+    most_comments = Post.published.annotate(total_comments = Count('comments')).order_by('-total_comments')[:count]
+    return {'most_comments':most_comments}
+
+@register.filter(name = 'markdown')
+def markdown_format(text):
+    return mark_safe(markdown.markdown(text))
+    

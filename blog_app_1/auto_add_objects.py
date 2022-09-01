@@ -1,13 +1,16 @@
 from django.contrib.auth.models import User
 from blog_app_1.models import Post
+import random
 
-def add(userr):
-    user = User.objects.get(username=userr)
+users = User.objects.all()
 
-    for i in range(5):
-        post = Post(title=f'Dummy Post {i+30}', slug=f'dummy-post-{i+30}', body='This is a dummy post', author=user, status='published')
+def add():
+    for i in range(30):
+        user = random.choice(users)
+        post = Post(title=f'Dummy Post {i+1}', slug=f'dummy-post-{i+1}', body='This is a dummy post', author=user, status='published')
         post.save()
 
 
-add('gift')
+
+add()
 print('done')
