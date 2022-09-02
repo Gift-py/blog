@@ -24,8 +24,8 @@ class Post(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
     
     #model manager helps in querying objects from db
-    objects = models.Manager() #default manager... does'nt need to be written just comes embedded in the model class
-    published = PublishedManager() #custom manager
+    objects = models.Manager()              #default manager... does'nt need to be written just comes embedded in the model class
+    published = PublishedManager()      #custom manager
 
     #tagging system
     tags = TaggableManager()
