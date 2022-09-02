@@ -10,7 +10,5 @@ def add():
         post = Post(title=f'Dummy Post {i+1}', slug=f'dummy-post-{i+1}', body='This is a dummy post', author=user, status='published')
         post.save()
 
-
-
 add()
 print('done')
