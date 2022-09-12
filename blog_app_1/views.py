@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
 from django.views.generic import ListView
@@ -6,9 +6,11 @@ from django.db.models import Count
 from django.core.mail import send_mail
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from taggit.models import Tag
+from django.urls import reverse
 
 from .models import Post, Comments
-from .forms import EmailPostForm, CommentForm, SearchForm
+from .forms import CreatePostForm, EmailPostForm, CommentForm, SearchForm
+from django.utils.text import slugify
 
 
 def post_list(request, tag_slug=None):
@@ -91,5 +93,17 @@ def post_search(request):
             search_query = SearchQuery(query)
             results = Post.published.annotate(search=search_vector, rank=SearchRank(search_vector, search_query)).filter(rank__gte=0.001).order_by('-rank')
     return render(request, 'blog/post/search.html', {'form': form, 'query': query, 'results': results}) 
+
+def create_post(request):
+    if request.method == 'POST':
+        create_form = CreatePostForm(request.POST)
+        if create_form.is_valid():
+            new_post = create_form.save(commit=False)
+            new_post.slug = slugify(new_post.title)
+            new_post.save()
+            return redirect(reverse('blog:post_detail', args=[new_post.publish.year, new_post.publish.month, new_post.publish.day, new_post.slug]))
+    else:
+        create_form = CreatePostForm()
+    return render(request, 'blog/post/create_post.html', {'create_form':create_form})
 
 
