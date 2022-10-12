@@ -83,7 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME':  'Blog',
         'USER': 'postgres',
-        'PASSWORD': 'AwesomeGod003',
+        'PASSWORD': 'enter-your-password',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -132,7 +132,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'jesuobohgift@gmail.com'
+EMAIL_HOST_USER = 'enter-your-email'
 EMAIL_HOST_PASSWORD = 'vbfemjvypwaetotj'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
